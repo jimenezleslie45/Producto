@@ -1,0 +1,43 @@
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ProductoService {
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    public List<Producto> listarProductos() {
+        return productoRepository.findAll();
+    }
+
+    public Producto buscarProductoPorId(Long id) {
+        return productoRepository.findById(id).orElse(null);
+    }
+
+    public Producto crearProducto(Producto producto) {
+        return productoRepository.save(producto);
+    }
+
+    public Producto actualizarProducto(Long id, Producto producto) {
+        Producto productoExistente = productoRepository.findById(id).orElse(null);
+        if (productoExistente != null) {
+            producto.setId(id);
+            return productoRepository.save(producto);
+        } else {
+            return null;
+        }
+    }
+
+    public boolean borrarProducto(Long id) {
+        Producto productoExistente = productoRepository.findById(id).orElse(null);
+        if (productoExistente != null) {
+            productoRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
